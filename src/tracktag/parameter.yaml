@@ -1,0 +1,25 @@
+%YAML:1.0
+image_width: 640
+image_height: 480
+camera_name: usb_cam
+camera_matrix: !!opencv-matrix
+  rows: 3
+  cols: 3
+  dt: d
+  data: [489.4777069384356, 0, 308.8032768908899, 0, 488.1852660517832, 268.6371343845645, 0, 0, 1]
+distortion_model: plumb_bob
+distortion_coefficients: !!opencv-matrix
+  rows: 1
+  cols: 5
+  dt: d
+  data: [0.03618971518001553, -0.08383321211248897, 0.004030107525985591, -0.004365030494665567, 0]
+rectification_matrix: !!opencv-matrix
+  rows: 3
+  cols: 3
+  dt: d
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+projection_matrix: !!opencv-matrix
+  rows: 3
+  cols: 4
+  dt : d
+  data: [488.5268249511719, 0, 305.0990841060138, 0, 0, 489.0720520019531, 269.8452152812879, 0, 0, 0, 1, 0]

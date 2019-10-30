@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>track_april_tag</name>
+  <version>2.2.9</version>
+  <description>rpi camera yc</description>
+  <maintainer email="cheng.yuan@flight.utias.utoronto.ca">Sergey Dorodnicov</maintainer>
+  <license>Apache 2.0</license>
+  
+
+  <author email="sergey.dorodnicov@intel.com">Sergey Dorodnicov</author>
+  <author email="doron.hirshberg@intel.com">Doron Hirshberg</author>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>image_transport</depend>
+  <depend>cv_bridge</depend>
+  <depend>roscpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+</package>
