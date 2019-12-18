@@ -141,7 +141,7 @@ int main(int argc, char** argv)
 
     ros::Subscriber loss_sub = nh.subscribe("/apriltag_loss",1,FlagDetect);
     message_filters::Subscriber<nav_msgs::Odometry> left_sub(nh, "/gazebo_ground_truth_Payload", 1);
-    message_filters::Subscriber<nav_msgs::Odometry> right_sub(nh, "/gazebo_ground_truth_UAV1", 1);
+    message_filters::Subscriber<nav_msgs::Odometry> right_sub(nh, "/gazebo_ground_truth_UAV2", 1);
     typedef message_filters::sync_policies::ApproximateTime<nav_msgs::Odometry, nav_msgs::Odometry> sync_pol;
     message_filters::Synchronizer<sync_pol> sync(sync_pol(10), left_sub,right_sub);
     sync.registerCallback(boost::bind(&GetPayloadPose,_1,_2));
