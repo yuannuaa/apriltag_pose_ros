@@ -35,7 +35,7 @@ find_package(catkin REQUIRED COMPONENTS
     cv_bridge
     image_transport
     geometry_msgs
-    nav_msgs
+    nav_msgsdt
     )
 
 
@@ -78,7 +78,7 @@ opencv_demo.cc
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
-${EIGEN3_LIBS}
+${EIGEN3_LIBS}dt
 /usr/local/lib/libapriltag.so
 /usr/local/lib/libapriltag.so.3
 /usr/local/lib/libapriltag.so.3.1.0
