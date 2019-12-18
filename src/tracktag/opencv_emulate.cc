@@ -109,6 +109,8 @@ void FlagDetect(const std_msgs::String::ConstPtr& msg)
         Loss_Flag = 0;
     }
     else;
+
+    std::cout << "command received" << std::endl;
 }
 
 
@@ -151,7 +153,7 @@ int main(int argc, char** argv)
         if (pub_flag == 1)
         {
             pose_publisher.publish(pose_msg);
-            std::cout << pose_msg.pose.covariance[1] << std::endl;
+            //std::cout << pose_msg.pose.covariance[1] << std::endl;
             pub_flag = 0;
         }
         
