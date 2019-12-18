@@ -17,10 +17,9 @@
 //Declaration
 void GetPayloadPose(const nav_msgs::Odometry::ConstPtr& payloadmsg, const nav_msgs::Odometry::ConstPtr& uavmsg);
 void FlagDetect(const std_msgs::String::ConstPtr& msg);
-std::mutex flag_mutex;
 bool Loss_Flag = 1;
 std::vector<std::pair<double , Eigen::Matrix4d>> relativeposedata;
-Eigen::Vector3d CalculateVelocityFromPose(std::map<double , Eigen::Matrix4d>& posedata);
+Eigen::Vector3d CalculateVelocityFromPose();
 ros::NodeHandle nh;
 ros::Publisher pose_publisher = nh.advertise<nav_msgs::Odometry>("/uav2/px4_command/visualmeasurement",10);
 
@@ -46,7 +45,7 @@ void GetPayloadPose(const nav_msgs::Odometry::ConstPtr& payloadmsg, const nav_ms
     payload_t << payload_msg.pose.pose.position.x , payload_msg.pose.pose.position.y , payload_msg.pose.pose.position.z;
     Eigen::Matrix4d payload_T = Eigen::MatrixXd::Identity(4,4);
     payload_T.block<3,3>(0,0) = payload_R;
-    payload_T.block<4,1>(0,3) = payload_t;
+    payload_T.block<3,1>(0,3) = payload_t;
 
     //obtain UAV state
     Eigen::Quaternion<double> q_uav;
@@ -59,7 +58,7 @@ void GetPayloadPose(const nav_msgs::Odometry::ConstPtr& payloadmsg, const nav_ms
     uav_t << uav_msg.pose.pose.position.x , uav_msg.pose.pose.position.y , uav_msg.pose.pose.position.z;
     Eigen::Matrix4d uav_T = Eigen::MatrixXd::Identity(4,4);
     uav_T.block<3,3>(0,0) = uav_R;
-    uav_T.block<4,1>(0,3) = uav_t;
+    uav_T.block<3,1>(0,3) = uav_t;
 
     //obtain relative pose
     payload_time = payload_msg.header.stamp.toSec();
@@ -100,14 +99,10 @@ void GetPayloadPose(const nav_msgs::Odometry::ConstPtr& payloadmsg, const nav_ms
 void FlagDetect(const std_msgs::String::ConstPtr& msg)
 {
     if (msg->data == "on"){
-        flag_mutex.lock;
         Loss_Flag = 0;
-        flag_mutex.unlock;
     }     
     else if (msg->data == "off"){
-        flag_mutex.lock;
         Loss_Flag = 1;
-        flag_mutex.unlock;
     }
     else;
 }
@@ -116,8 +111,8 @@ void FlagDetect(const std_msgs::String::ConstPtr& msg)
 Eigen::Vector3d CalculateVelocityFromPose()
 {
     Eigen::Vector3d payload_v_onestep;
-    double dt = relativeposedata.back().first - *(relativeposedata.end-1).first;
-    payload_v_onestep = (*(relativeposedata.end).sencond - *(relativeposedata.end-1).sencond).block<3,1>(0,3) / dt; 
+    double dt = relativeposedata.back().first - relativeposedata[relativeposedata.size()-2].first;
+    payload_v_onestep = (relativeposedata.back().second - relativeposedata[relativeposedata.size()-2].second).block<3,1>(0,3) / dt; 
     return payload_v_onestep;
     
 }

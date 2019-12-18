@@ -35,7 +35,7 @@ find_package(catkin REQUIRED COMPONENTS
     cv_bridge
     image_transport
     geometry_msgs
-    nav_mgs
+    nav_msgs
     )
 
 
