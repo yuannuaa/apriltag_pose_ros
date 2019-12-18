@@ -78,7 +78,7 @@ opencv_demo.cc
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
-${EIGEN3_LIBS}dt
+${EIGEN3_LIBS}
 /usr/local/lib/libapriltag.so
 /usr/local/lib/libapriltag.so.3
 /usr/local/lib/libapriltag.so.3.1.0
