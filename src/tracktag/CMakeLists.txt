@@ -70,8 +70,7 @@ catkin_package(
 
 
 add_library(${PROJECT_NAME} SHARED
-${apriltag_LIBRARIES}
-opencv_demo.cc
+
 )
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}
