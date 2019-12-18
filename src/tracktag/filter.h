@@ -40,9 +40,9 @@
 #include <eigen3/Eigen/Dense>
 
 //Declaration
-class constant_filter{
+class cv_filter{
     public:
-    constant_filter(Eigen::Vector3d& kmeasure){
+    cv_filter(Eigen::Vector3d& kmeasure){
         X.block<3,1>(0,0) = kmeasure;
         X.block<3,1>(3,0) = Eigen::MatrixXd::Zero(3,1);
         init();
@@ -58,10 +58,10 @@ class constant_filter{
     
 
 
-    Eigen::Matrix<double,N,1> X; //state
-    Eigen::Matrix<double,N,N> F,P,Q; //state transformtion matrix and covariance matrix and process noise
+    Eigen::Matrix<double,N,1> X,X_pre; //state
+    Eigen::Matrix<double,N,N> F,P,Q,P_pre; //state transformtion matrix and covariance matrix and process noise
     Eigen::Matrix<double,M,N> H; //observation matrix
-    Eigen::Matrix<double,N,M> G; //gain
+    Eigen::Matrix<double,N,M> K; //gain
     Eigen::Matrix<double,M,M> R; // covariance of observation
     Eigen::Matrix<double,M,1> Z; // observation
     
