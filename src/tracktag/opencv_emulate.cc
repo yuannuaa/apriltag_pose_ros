@@ -18,7 +18,7 @@
 void GetPayloadPose(const nav_msgs::Odometry::ConstPtr& payloadmsg, const nav_msgs::Odometry::ConstPtr& uavmsg);
 void FlagDetect(const std_msgs::String::ConstPtr& msg);
 void initros();
-bool Loss_Flag = 1;
+bool Loss_Flag = 0;
 bool pub_flag = 0;
 std::vector<std::pair<double , Eigen::Matrix4d>> relativeposedata;
 Eigen::Vector3d CalculateVelocityFromPose();
@@ -103,10 +103,10 @@ void GetPayloadPose(const nav_msgs::Odometry::ConstPtr& payloadmsg, const nav_ms
 void FlagDetect(const std_msgs::String::ConstPtr& msg)
 {
     if (msg->data == "on"){
-        Loss_Flag = 0;
+        Loss_Flag = 1;
     }     
     else if (msg->data == "off"){
-        Loss_Flag = 1;
+        Loss_Flag = 0;
     }
     else;
 }
@@ -136,11 +136,12 @@ int main(int argc, char** argv)
     ros::start();
     ros::NodeHandle nh;
     ros::Publisher pose_publisher = nh.advertise<nav_msgs::Odometry>("/uav2/px4_command/visualmeasurement",10);
+
     
 
-
+    ros::Subscriber loss_sub = nh.subscribe("/apriltag_loss",1,FlagDetect);
     message_filters::Subscriber<nav_msgs::Odometry> left_sub(nh, "/gazebo_ground_truth_Payload", 1);
-    message_filters::Subscriber<nav_msgs::Odometry> right_sub(nh, "/gazebo_ground_truth_UAV2", 1);
+    message_filters::Subscriber<nav_msgs::Odometry> right_sub(nh, "/gazebo_ground_truth_UAV1", 1);
     typedef message_filters::sync_policies::ApproximateTime<nav_msgs::Odometry, nav_msgs::Odometry> sync_pol;
     message_filters::Synchronizer<sync_pol> sync(sync_pol(10), left_sub,right_sub);
     sync.registerCallback(boost::bind(&GetPayloadPose,_1,_2));
@@ -150,6 +151,7 @@ int main(int argc, char** argv)
         if (pub_flag == 1)
         {
             pose_publisher.publish(pose_msg);
+            std::cout << pose_msg.pose.covariance[1] << std::endl;
             pub_flag = 0;
         }
         
