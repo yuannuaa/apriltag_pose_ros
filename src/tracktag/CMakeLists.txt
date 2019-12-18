@@ -35,9 +35,11 @@ find_package(catkin REQUIRED COMPONENTS
     cv_bridge
     image_transport
     geometry_msgs
+    nav_mgs
     )
 
 
+find_package(Eigen3 REQUIRED)
 find_package(OpenCV 3.0 QUIET)
 if(NOT OpenCV_FOUND)
    message(FATAL_ERROR "OpenCV > 2.4.3 not found.")
@@ -53,6 +55,7 @@ ${PROJECT_SOURCE_DIR}
 ${apriltag_INCLUDE_DIRS}
 ${catkin_INCLUDE_DIRS}
 /usr/local/include/apriltag
+${EIGEN3_INCLUDE_DIRS}
 )
 
 catkin_package(
@@ -64,6 +67,7 @@ catkin_package(
     geometry_msgs
     cv_bridge
     image_transport
+    nav_msgs
     )
 
 
@@ -74,6 +78,7 @@ opencv_demo.cc
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
+${EIGEN3_LIBS}
 /usr/local/lib/libapriltag.so
 /usr/local/lib/libapriltag.so.3
 /usr/local/lib/libapriltag.so.3.1.0
@@ -85,6 +90,12 @@ ${OpenCV_LIBS}
 add_executable(april_tag_opencv
 opencv_demo.cc)
 target_link_libraries(april_tag_opencv 
+${PROJECT_NAME}
+${catkin_LIBRARIES})
+
+add_executable(april_tag_opencv_emulate
+opencv_emulate.cc)
+target_link_libraries(april_tag_opencv_emulate 
 ${PROJECT_NAME}
 ${catkin_LIBRARIES})
 

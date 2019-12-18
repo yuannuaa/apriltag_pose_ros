@@ -1,19 +1,25 @@
 {
-  "configurations": [
-    {
-      "browse": {
-        "databaseFilename": "",
-        "limitSymbolsToIncludedHeaders": true
-      },
-      "includePath": [
-        "/home/yc/px4_ws/devel/include/**",
-        "/opt/ros/kinetic/include/**",
-        "/home/yc/px4_ws/src/optitrack_broadcast/include/**",
-        "/home/yc/px4_ws/src/px4_command/include/**",
-        "/home/yc/px4_ws/src/qt_ground_station/include/**",
-        "/usr/include/**"
-      ],
-      "name": "ROS"
-    }
-  ]
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/yc/px4_ws/devel/include/**",
+                "/opt/ros/kinetic/include/**",
+                "/home/yc/px4_ws/src/optitrack_broadcast/include/**",
+                "/home/yc/px4_ws/src/px4_command/include/**",
+                "/home/yc/px4_ws/src/qt_ground_station/include/**",
+                "/usr/include/**",
+                "/usr/local/include/**"               
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/clang-3.5",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
 }
