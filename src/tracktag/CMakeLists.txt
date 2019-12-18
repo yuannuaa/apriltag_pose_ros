@@ -45,7 +45,6 @@ if(NOT OpenCV_FOUND)
    message(FATAL_ERROR "OpenCV > 2.4.3 not found.")
 endif()
 
-find_package(apriltag REQUIRED)
 
 
 
@@ -54,7 +53,6 @@ include_directories(
 ${PROJECT_SOURCE_DIR}
 ${apriltag_INCLUDE_DIRS}
 ${catkin_INCLUDE_DIRS}
-/usr/local/include/apriltag
 ${EIGEN3_INCLUDE_DIRS}
 )
 
@@ -78,20 +76,12 @@ opencv_demo.cc
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
-${EIGEN3_LIBS}dt
-/usr/local/lib/libapriltag.so
-/usr/local/lib/libapriltag.so.3
-/usr/local/lib/libapriltag.so.3.1.0
+${EIGEN3_LIBS}
 )
 
 # Build examples
 
 
-add_executable(april_tag_opencv
-opencv_demo.cc)
-target_link_libraries(april_tag_opencv 
-${PROJECT_NAME}
-${catkin_LIBRARIES})
 
 add_executable(april_tag_opencv_emulate
 opencv_emulate.cc)
