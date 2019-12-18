@@ -51,7 +51,6 @@ endif()
 
 include_directories(
 ${PROJECT_SOURCE_DIR}
-${apriltag_INCLUDE_DIRS}
 ${catkin_INCLUDE_DIRS}
 ${EIGEN3_INCLUDE_DIRS}
 )
@@ -69,14 +68,6 @@ catkin_package(
     )
 
 
-add_library(${PROJECT_NAME} SHARED
-
-)
-add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(${PROJECT_NAME}
-${OpenCV_LIBS}
-${EIGEN3_LIBS}
-)
 
 # Build examples
 
@@ -85,6 +76,8 @@ ${EIGEN3_LIBS}
 add_executable(april_tag_opencv_emulate
 opencv_emulate.cc)
 target_link_libraries(april_tag_opencv_emulate 
-${PROJECT_NAME}
-${catkin_LIBRARIES})
+
+${catkin_LIBRARIES}
+${OpenCV_LIBS}
+${EIGEN3_LIBS})
 
