@@ -93,7 +93,7 @@ void cv_filter::update(Eigen::Vector3d& observe){
     // std::cout << measurement << std::endl;
 
       if (measurement.norm() == 0){ //detect lost
-           loss = true;    
+           F_count ++;    
       }
 
 
@@ -107,7 +107,11 @@ void cv_filter::update(Eigen::Vector3d& observe){
            loss = false;
            this->update(measurement);
            pub_flag = 1;
+           F_count = 0;
       }
+
+      if(F_count > 10)
+          loss = true;
       
           
 

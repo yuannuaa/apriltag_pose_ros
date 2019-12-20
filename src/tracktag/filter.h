@@ -53,6 +53,7 @@ class cv_filter{
     const double dt = 1.0f/100;
     const static int N = 6;
     const static int M = 3;
+    unsigned int F_count = 0;
 
 
     void init(Eigen::Vector3d& kmeasure);
