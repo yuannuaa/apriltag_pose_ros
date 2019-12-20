@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     image_transport::Publisher image_pub = it.advertise("rpicamerav2/image_raw", 1);
     ros::Publisher pose_pub = nh.advertise<geometry_msgs::PoseStamped>("rpicamerav2/apriltag/pose", 1);
     sensor_msgs::ImagePtr msg;
-   
+    geometry_msgs::PoseStamped pose_msg;
     ros::Rate loop_rate(30);
 
     getopt_t *getopt = getopt_create();
@@ -193,19 +193,19 @@ int main(int argc, char *argv[])
         zarray_t *detections = apriltag_detector_detect(td, &im);
         cout << zarray_size(detections) << " tags detected" << endl;
         if (zarray_size(detections) == 0){
-            geometry_msgs::PoseStamped pose_msg0;
-            pose_msg0.header.stamp = time_c;
-            pose_msg0.pose.position.x = 0;
-            pose_msg0.pose.position.y = 0;
-            pose_msg0.pose.position.z = 0;
+       
+            pose_msg.header.stamp = time_c;
+            pose_msg.pose.position.x = 0;
+            pose_msg.pose.position.y = 0;
+            pose_msg.pose.position.z = 0;
 
 
         //  double * quater = Rotation_Quaternion (r11,r12,r13,r21,r22,r23,r31,r32,r33);
-            pose_msg0.pose.orientation.w = time_c.toSec();
-            pose_msg0.pose.orientation.x = 0;
-            pose_msg0.pose.orientation.y = 0;
-            pose_msg0.pose.orientation.z = 0;
-            pose_pub.publish(pose_msg0);
+            pose_msg.pose.orientation.w = time_c.toSec();
+            pose_msg.pose.orientation.x = 0;
+            pose_msg.pose.orientation.y = 0;
+            pose_msg.pose.orientation.z = 0;
+            pose_pub.publish(pose_msg);
         }
 
         // Draw detection outlines
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
 	    //publish pose 
 
 
-            geometry_msgs::PoseStamped pose_msg;
+           
             pose_msg.header.stamp = time_c;
             pose_msg.pose.position.x = pose.t->data[0];
             pose_msg.pose.position.y = pose.t->data[1];
@@ -245,7 +245,7 @@ int main(int argc, char *argv[])
             pose_msg.pose.orientation.z = atan2(r21,r11) * 180 / M_PI;
 	    pose_pub.publish(pose_msg);
 
-
+/*
             line(frame, Point(det->p[0][0], det->p[0][1]),
                      Point(det->p[1][0], det->p[1][1]),
                      Scalar(0, 0xff, 0), 2);
@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
                                             &baseline);
             putText(frame, text, Point(det->c[0]-textsize.width/2,
                                        det->c[1]+textsize.height/2),
-                    fontface, fontscale, Scalar(0xff, 0x99, 0), 2);
+                    fontface, fontscale, Scalar(0xff, 0x99, 0), 2);*/
         }
         apriltag_detections_destroy(detections);
 	std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();

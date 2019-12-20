@@ -122,7 +122,8 @@ void cv_filter::update(Eigen::Matrix<double,cv_filter::M,1>& observe){
            if (sizeof(position_data) > 10){
                 Eigen::Vector3d Velocity;
                 double dt = position_data.back().first - position_data[position_data.size()-2].first;
-                Velocity = (position_data.back().second - position_data[position_data.size()-2].second) / dt;
+                if (dt > 0)
+                    Velocity = (position_data.back().second - position_data[position_data.size()-2].second) / dt;
               //std::cout << "time is " << dt << std::endl<<"v====isss   " << Velocity << std::endl << "posi is  " << position_data.back().second 
               //   << "posi old is  " << position_data[position_data.size()-2].second << std::endl;
                 measurement.block<3,1>(3,0) = Velocity;
