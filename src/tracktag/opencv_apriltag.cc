@@ -173,11 +173,11 @@ int main(int argc, char *argv[])
         cvtColor(frame, gray, COLOR_BGR2GRAY);
      //   undistort(gray,un_gray,matrix,coeff,new_matrix);
         ros::Time time_c= ros::Time::now (); 
-        if (!frame.empty()) {
+       /* if (!frame.empty()) {
             msg = cv_bridge::CvImage(std_msgs::Header(), "mono8", gray).toImageMsg();  
 	        msg->header.stamp = time_c;  
             image_pub.publish(msg);  
-        }
+        }*/
 
 //ros camera publish
 
@@ -192,20 +192,21 @@ int main(int argc, char *argv[])
 
         zarray_t *detections = apriltag_detector_detect(td, &im);
         cout << zarray_size(detections) << " tags detected" << endl;
-        geometry_msgs::PoseStamped pose_msg0;
-        pose_msg0.header.stamp = time_c;
-        pose_msg0.pose.position.x = 0;
-        pose_msg0.pose.position.y = 0;
-        pose_msg0.pose.position.z = 0;
+        if (zarray_size(detections) == 0){
+            geometry_msgs::PoseStamped pose_msg0;
+            pose_msg0.header.stamp = time_c;
+            pose_msg0.pose.position.x = 0;
+            pose_msg0.pose.position.y = 0;
+            pose_msg0.pose.position.z = 0;
 
 
-      //  double * quater = Rotation_Quaternion (r11,r12,r13,r21,r22,r23,r31,r32,r33);
-        pose_msg0.pose.orientation.w = time_c.toSec();
-        pose_msg0.pose.orientation.x = 0;
-        pose_msg0.pose.orientation.y = 0;
-        pose_msg0.pose.orientation.z = 0;
-        pose_pub.publish(pose_msg0);
-
+        //  double * quater = Rotation_Quaternion (r11,r12,r13,r21,r22,r23,r31,r32,r33);
+            pose_msg0.pose.orientation.w = time_c.toSec();
+            pose_msg0.pose.orientation.x = 0;
+            pose_msg0.pose.orientation.y = 0;
+            pose_msg0.pose.orientation.z = 0;
+            pose_pub.publish(pose_msg0);
+        }
 
         // Draw detection outlines
         for (int i = 0; i < zarray_size(detections); i++) {
@@ -274,10 +275,10 @@ int main(int argc, char *argv[])
 	std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 	double ttrack = std::chrono::duration_cast< std::chrono::duration<double> >(t2 - t1).count();
 	std::cout << "Tracking time cost is " << ttrack << "ms \n";
-       imshow("Tag Detections", frame);
+     // imshow("Tag Detections", frame);
      //  imshow("Tag Detections undistort", un_gray);
-        if (waitKey(30) >= 0)
-            break;
+     //   if (waitKey(30) >= 0)
+     //       break;
        ros::spinOnce();  
        loop_rate.sleep();//与ros::Rate 
     }

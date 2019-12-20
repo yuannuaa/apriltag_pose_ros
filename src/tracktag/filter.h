@@ -52,13 +52,15 @@ class cv_filter{
     bool  pub_flag  = false;
     const double dt = 1.0f/100;
     const static int N = 6;
-    const static int M = 3;
+    const static int M = 6;
     unsigned int F_count = 0;
+
+    std::vector <std::pair<double,Eigen::Vector3d>> position_data;
 
 
     void init(Eigen::Vector3d& kmeasure);
     void predict();
-    void update(Eigen::Vector3d& observe);
+    void update(Eigen::Matrix<double,cv_filter::M,1>& observe);
     void receivedata(const geometry_msgs::PoseStamped::ConstPtr& msg);
     void publishpose(const ros::Publisher& pub);
 
