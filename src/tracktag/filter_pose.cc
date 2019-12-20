@@ -28,9 +28,10 @@ int main(int argc , char** argv)
     {
         if(apriltag_filter.ini == true){
             apriltag_filter.predict();
-            apriltag_filter.publishpose(pose_publisher);
+            
         }
         ros::spinOnce();
+        apriltag_filter.publishpose(pose_publisher);
         
             
         loop_rate.sleep();
