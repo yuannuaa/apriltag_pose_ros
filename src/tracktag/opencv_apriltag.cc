@@ -43,15 +43,10 @@ extern "C" {
 #include "apriltag.h"
 #include "tag36h11.h"
 #include "tag25h9.h"
-#include "tag16h5.h"
-#include "tagCircle21h7.h"
-#include "tagCircle49h12.h"
-#include "tagCustom48h12.h"
-#include "tagStandard41h12.h"
-#include "tagStandard52h13.h"
 #include "common/getopt.h"
 #include "apriltag_pose.h"
 }
+
 
 using namespace std;
 using namespace cv;
@@ -65,60 +60,12 @@ std::string gstreamer_pipeline (int capture_width, int capture_height, int displ
 }
 
 
-/*double* Rotation_Quaternion(double r11, double r12, double r13, double r21, double r22, double r23, double r31, double r32, double r33 )
-{
-   cout << "0   " ;
-   double quat[4];
- 
-   cout << "1   " ;
-   if ( sqrt(1 + r11 + r22 + r33) > 0)
-	{
-		quat[0] = sqrt(1 + r11 + r22 + r33) / 2;
-		quat[1] = (r32 - r23) / (4 * quat[0]);
-		quat[2] = (r13 - r31) / (4 * quat[0]);
-		quat[3] = (r21 - r12) / (4 * quat[0]);
-	}  
-   else if ( r11 > r22 && r11 > r33)
-	{
-		double t = sqrt ( 1 + r11 - r22 - r33);
-		quat[0] = (r32 - r23) / t;
-		quat[1] = t / 4 ;
-		quat[2] = (r13 + r31) / t;
-		quat[3] = (r21 + r12) / t;
 
-	}
-    else if ( r22 > r11 && r22 > r33)
-	{
-		double t = sqrt ( 1 - r11 + r22 - r33);
-		quat[0] = (r13 - r31) / t;
-		quat[1] = (r21 + r12) / t;
-		quat[2] = t / 4 ;
-		quat[3] = (r32 + r23) / t;		
-	}
-    else if ( r33 > r11 && r33 > r22)
-	{
-		double t = sqrt ( 1 - r11 - r22 + r33);
-		quat[0] = (r21 - r12) / t;
-		quat[1] = (r13 + r31) / t;
-		quat[2] = (r23 - r32) / t;
-		quat[3] = t / 4 ;	
-	}
-    else
-	{ 
-		quat[0] = 1;
-		quat[1] = 0;
-		quat[2] = 0;
-		quat[3] = 0;
-	}
-cout << "2   " ;
-   return quat;
-}
-*/
 int main(int argc, char *argv[])
 {
 
     ros::init(argc, argv, "track_april_tag");
-     ros::NodeHandle nh;
+    ros::NodeHandle nh;
     image_transport::ImageTransport it(nh);
     image_transport::Publisher image_pub = it.advertise("rpicamerav2/image_raw", 1);
     ros::Publisher pose_pub = nh.advertise<geometry_msgs::PoseStamped>("rpicamerav2/apriltag/pose", 1);
@@ -191,18 +138,6 @@ int main(int argc, char *argv[])
         tf = tag36h11_create();
     } else if (!strcmp(famname, "tag25h9")) {
         tf = tag25h9_create();
-    } else if (!strcmp(famname, "tag16h5")) {
-        tf = tag16h5_create();
-    } else if (!strcmp(famname, "tagCircle21h7")) {
-        tf = tagCircle21h7_create();
-    } else if (!strcmp(famname, "tagCircle49h12")) {
-        tf = tagCircle49h12_create();
-    } else if (!strcmp(famname, "tagStandard41h12")) {
-        tf = tagStandard41h12_create();
-    } else if (!strcmp(famname, "tagStandard52h13")) {
-        tf = tagStandard52h13_create();
-    } else if (!strcmp(famname, "tagCustom48h12")) {
-        tf = tagCustom48h12_create();
     } else {
         printf("Unrecognized tag family name. Use e.g. \"tag36h11\".\n");
         exit(-1);
@@ -230,6 +165,7 @@ int main(int argc, char *argv[])
 
 
     Mat frame, gray , un_gray;
+
     while (ros::ok()) {
 	std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 
@@ -237,9 +173,9 @@ int main(int argc, char *argv[])
         cvtColor(frame, gray, COLOR_BGR2GRAY);
      //   undistort(gray,un_gray,matrix,coeff,new_matrix);
         ros::Time time_c= ros::Time::now (); 
-       if (!frame.empty()) {
+        if (!frame.empty()) {
             msg = cv_bridge::CvImage(std_msgs::Header(), "mono8", gray).toImageMsg();  
-	    msg->header.stamp = time_c;  
+	        msg->header.stamp = time_c;  
             image_pub.publish(msg);  
         }
 
@@ -291,15 +227,15 @@ int main(int argc, char *argv[])
             pose_msg.pose.position.x = pose.t->data[0];
             pose_msg.pose.position.y = pose.t->data[1];
             pose_msg.pose.position.z = pose.t->data[2];
-	   double r11 = pose.R->data[0];   
-	   double r12 = pose.R->data[1];   
-	   double r13 = pose.R->data[2];   
-	   double r21 = pose.R->data[3];   
-	   double r22 = pose.R->data[4];   
-	   double r23 = pose.R->data[5];   
-	   double r31 = pose.R->data[6];   
-	   double r32 = pose.R->data[7];   
-	   double r33 = pose.R->data[8];  
+	        double r11 = pose.R->data[0];   
+	        double r12 = pose.R->data[1];   
+	        double r13 = pose.R->data[2];   
+	        double r21 = pose.R->data[3];   
+	        double r22 = pose.R->data[4];   
+	        double r23 = pose.R->data[5];   
+	        double r31 = pose.R->data[6];   
+	        double r32 = pose.R->data[7];   
+	        double r33 = pose.R->data[8];  
 
 	  //  double * quater = Rotation_Quaternion (r11,r12,r13,r21,r22,r23,r31,r32,r33);
             pose_msg.pose.orientation.w = time_c.toSec();
@@ -352,18 +288,6 @@ int main(int argc, char *argv[])
         tag36h11_destroy(tf);
     } else if (!strcmp(famname, "tag25h9")) {
         tag25h9_destroy(tf);
-    } else if (!strcmp(famname, "tag16h5")) {
-        tag16h5_destroy(tf);
-    } else if (!strcmp(famname, "tagCircle21h7")) {
-        tagCircle21h7_destroy(tf);
-    } else if (!strcmp(famname, "tagCircle49h12")) {
-        tagCircle49h12_destroy(tf);
-    } else if (!strcmp(famname, "tagStandard41h12")) {
-        tagStandard41h12_destroy(tf);
-    } else if (!strcmp(famname, "tagStandard52h13")) {
-        tagStandard52h13_destroy(tf);
-    } else if (!strcmp(famname, "tagCustom48h12")) {
-        tagCustom48h12_destroy(tf);
     }
 
 

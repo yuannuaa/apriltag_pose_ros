@@ -73,7 +73,7 @@ catkin_package(
 
 add_library(${PROJECT_NAME} SHARED
 ${apriltag_LIBRARIES}
-opencv_demo.cc
+opencv_apriltag.cc
 )
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}
@@ -88,14 +88,23 @@ ${EIGEN3_LIBS}
 
 
 add_executable(april_tag_opencv
-opencv_demo.cc)
+opencv_apriltag.cc)
 target_link_libraries(april_tag_opencv 
 ${PROJECT_NAME}
 ${catkin_LIBRARIES})
 
-add_executable(april_tag_opencv_emulate
-opencv_emulate.cc)
-target_link_libraries(april_tag_opencv_emulate 
+add_executable(pose_filter
+filter_pose.cc
+filter.h
+filter.cc
+)
+target_link_libraries(pose_filter
 ${PROJECT_NAME}
-${catkin_LIBRARIES})
+${catkin_LIBRARIES}
+${apriltag_LIBRARIES}
+${OpenCV_LIBS}
+${EIGEN3_LIBS}
+)
+
+
 

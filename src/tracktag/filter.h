@@ -39,27 +39,33 @@
 
 #include <eigen3/Eigen/Dense>
 
+#include <ros/ros.h>
+#include <nav_msgs/Odometry.h>
+#include <geometry_msgs/PoseStamped.h>
+
 //Declaration
 class cv_filter{
-    public:
-    cv_filter(Eigen::Vector3d& kmeasure){
-        X.block<3,1>(0,0) = kmeasure;
-        X.block<3,1>(3,0) = Eigen::MatrixXd::Zero(3,1);
-        init();
-
-    };
+  public:
+    cv_filter(){};
+    bool  ini  = false;
+    bool  loss = false;
+    bool  pub_flag  = false;
     const double dt = 1.0f/100;
     const static int N = 6;
     const static int M = 3;
-    void init();
+
+
+    void init(Eigen::Vector3d& kmeasure);
     void predict();
     void update(Eigen::Vector3d& observe);
+    void receivedata(const geometry_msgs::PoseStamped::ConstPtr& msg);
+    void publishpose(const ros::Publisher& pub);
 
     
 
 
-    Eigen::Matrix<double,N,1> X,X_pre; //state
-    Eigen::Matrix<double,N,N> F,P,Q,P_pre; //state transformtion matrix and covariance matrix and process noise
+    Eigen::Matrix<double,N,1> X,X_pre,X_temp; //state
+    Eigen::Matrix<double,N,N> F,P,Q,P_pre,P_temp; //state transformtion matrix and covariance matrix and process noise
     Eigen::Matrix<double,M,N> H; //observation matrix
     Eigen::Matrix<double,N,M> K; //gain
     Eigen::Matrix<double,M,M> R; // covariance of observation
