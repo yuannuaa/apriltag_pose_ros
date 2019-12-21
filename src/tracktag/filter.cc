@@ -150,8 +150,8 @@ void cv_filter::publishpose(const ros::Publisher& pub){
           pose_msg.header.frame_id = "filter_apriltag_tag";
           // There need to be compensate with attitude of UAV , if have yaw angle it will cause more error;
           // now the temp compensation is 0.03 -0.05 -0.02 should be multiple by a rotation matrix
-          pose_msg.pose.pose.position.x = X(1) + 0.03;
-          pose_msg.pose.pose.position.y = X(0) - 0.05;
+          pose_msg.pose.pose.position.x = X(1) + 0.02;
+          pose_msg.pose.pose.position.y = X(0) + 0.05;
           pose_msg.pose.pose.position.z = -X(2)- 0.02;
           pose_msg.pose.covariance[0] = P(1,1);
           pose_msg.pose.covariance[7] = P(0,0);
