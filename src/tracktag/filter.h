@@ -32,6 +32,7 @@
         double tmp4[M][M];
         double tmp5[M]; 
     * </pre>
+    * @TODO need to get attitude information from UAV and then to compensate error caused by roll and pictch angle
   */
 #include <iostream>
 #include <vector>

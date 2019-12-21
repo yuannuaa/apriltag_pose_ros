@@ -92,7 +92,7 @@ void cv_filter::update(Eigen::Matrix<double,cv_filter::M,1>& observe){
 
  void cv_filter::receivedata(const geometry_msgs::PoseStamped::ConstPtr& msg){
       Eigen::Matrix<double,cv_filter::M,1> measurement;
-      // There need to be compensate with attitude of UAV , if have yaw angle it will cause more error;
+      
       measurement(0) = msg->pose.position.x;
       measurement(1) = msg->pose.position.y;
       measurement(2) = msg->pose.position.z; //compensate some offset
@@ -101,7 +101,7 @@ void cv_filter::update(Eigen::Matrix<double,cv_filter::M,1>& observe){
 
 
     // std::cout << measurement << std::endl; detect loss
-      if(F_count > 10)
+      if(F_count > 10) //losr for a long time 10times
           loss = true;
 
       if (measurement.norm() == 0){ //detect lost
@@ -110,14 +110,14 @@ void cv_filter::update(Eigen::Matrix<double,cv_filter::M,1>& observe){
       }
 
      //detect 
-      else if (this->ini == 0){
+      else if (this->ini == 0){ // if not initilization
            init(p_measure);
            this->ini = 1;
            pub_flag = 1;
            
       }
       else if (this->ini ==1 && p_measure.norm() != 0){
-           position_data.push_back(std::make_pair(msg->header.stamp.toSec(),p_measure));
+           position_data.push_back(std::make_pair(msg->header.stamp.toSec(),p_measure)); //record data to calculate velocity
 
            if (sizeof(position_data) > 10){
                 Eigen::Vector3d Velocity;
@@ -142,15 +142,16 @@ void cv_filter::update(Eigen::Matrix<double,cv_filter::M,1>& observe){
 
  }
 
-
+//Publish message if predict and update has achieved a new message the flag will be 1
 void cv_filter::publishpose(const ros::Publisher& pub){
      if(pub_flag == 1){
           nav_msgs::Odometry pose_msg;
           pose_msg.header.stamp = ros::Time::now();
           pose_msg.header.frame_id = "filter_apriltag_tag";
-
-          pose_msg.pose.pose.position.x = X(1);
-          pose_msg.pose.pose.position.y = X(0) + 0.05;
+          // There need to be compensate with attitude of UAV , if have yaw angle it will cause more error;
+          // now the temp compensation is 0.03 -0.05 -0.02 should be multiple by a rotation matrix
+          pose_msg.pose.pose.position.x = X(1) + 0.03;
+          pose_msg.pose.pose.position.y = X(0) - 0.05;
           pose_msg.pose.pose.position.z = -X(2)- 0.02;
           pose_msg.pose.covariance[0] = P(1,1);
           pose_msg.pose.covariance[7] = P(0,0);
@@ -170,7 +171,7 @@ void cv_filter::publishpose(const ros::Publisher& pub){
           if (loss == 1)
                pose_msg.pose.covariance[1] = 1;
           pub.publish(pose_msg);
-          pub_flag = 0;
+          pub_flag = 0; //after publishing it will be reset to zero 
      }
 
       }
