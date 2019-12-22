@@ -1,3 +1,4 @@
+
 # apriltag_pose_ros
 This is a ROS wrapper for publishing Apriltag with Jetson nano and RPI camera V2 through CSI  
 It is truely easy to use. On jetson nano with ROS. A constant velocity EKF filter is introducted to enhance the performance.  
@@ -30,6 +31,16 @@ catkin_make
 	> ```
 
 ## Function Description 
+
+### Files   
+- **cmake_modules** Find the position of Eigen3  
+- **CMakeLists.txt**  Cmake file  
+- **CalibrationResults** Internal and external parameters of the camera through Kalibr  
+- **filter.cc** Detail implmentation of constant velocity filter  
+- **filter.h** Declaration of filter  
+- **filter_pose** Subscribe the information from apriltag detect as measurements to filting  
+- **opencv_apriltag.cc** Detection and pose estimation of Apriltag  
+- **opencv_emulate.cc** For simulation  
 
 21 Dec 2019
 
